@@ -1,0 +1,13 @@
+limit_req_zone $binary_remote_addr zone=one:10m rate=6r/m;
+
+server {
+        listen 3000 default_server;
+        listen [::]:3000 default_server;
+
+        location / {
+                proxy_pass http://localhost:8000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                limit_req zone=one;
+        }
+}
